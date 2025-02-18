@@ -1,8 +1,7 @@
 import React from 'react';
 import Form from './Form';
-import Todo from './Todo';
 import TodoList from './TodoList';
-import { date } from 'yup';
+
 
 
 
@@ -10,13 +9,7 @@ export default class App extends React.Component {
   constructor (){
     super();
     this.state = {
-    todos: [
-      {
-        name: 'Organize the garage',
-        id: Math.random(),
-        compeleted: false
-      }
-    ]
+    todos: []
     }
   }
   addToDo = (addName) => {
@@ -28,11 +21,20 @@ export default class App extends React.Component {
 
     this.setState({todos: [...this.state.todos, newToDo]})
   }
+
+  toggleTodo = (id) => {
+    if(!this.state.todos) return; /// prevents errors if todos is undefine
+    this.setState({
+      todos: this.state.todos.map(todo =>
+      todo.id === id ? {...todo, compeleted: !todo.compeleted } : todo
+      )
+  });
+  };
   render() {
     return (
       <div>
         <Form addToDo = {this.addToDo}/>
-        <TodoList todos={this.todos} />
+        <TodoList todos={this.state.todos} toggleTodo={this.toggleTodo} />
       </div>
     )
   }
